@@ -3,6 +3,7 @@ import { DatabaseInitial } from "./db.connect"
 import commentRoutes from "./routes/comment/comment.route"
 import postRoutes from "./routes/post/post.routes"
 import users from "./routes/user/user.routes"
+import "dotenv/config"
 
 const server = fastify({
   logger: {
@@ -22,9 +23,11 @@ server.register(users)
 server.register(postRoutes)
 server.register(commentRoutes)
 
+const port: number = parseInt(process.env.PORT) || 8000
+
 server.listen(
   {
-    port: parseInt(process.env.PORT!) | 8000,
+    port: port,
   },
   (err, address) => {
     if (err) {
