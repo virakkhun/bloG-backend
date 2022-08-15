@@ -25,7 +25,8 @@ server.register(commentRoutes)
 
 server.listen(
   {
-    port: 3000,
+    port: parseInt(process.env.PORT!) || 8000,
+    host: "0.0.0.0",
   },
   (err, address) => {
     if (err) {
