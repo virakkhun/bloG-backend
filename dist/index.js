@@ -8,6 +8,7 @@ const db_connect_1 = require("./db.connect");
 const comment_route_1 = __importDefault(require("./routes/comment/comment.route"));
 const post_routes_1 = __importDefault(require("./routes/post/post.routes"));
 const user_routes_1 = __importDefault(require("./routes/user/user.routes"));
+require("dotenv/config");
 const server = (0, fastify_1.default)({
     logger: {
         level: "info",
@@ -24,7 +25,8 @@ server.register(user_routes_1.default);
 server.register(post_routes_1.default);
 server.register(comment_route_1.default);
 server.listen({
-    port: 8000,
+    port: parseInt(process.env.PORT) || 8000,
+    host: "0.0.0.0",
 }, (err, address) => {
     if (err) {
         console.log(err);
