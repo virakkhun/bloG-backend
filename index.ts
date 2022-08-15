@@ -23,11 +23,9 @@ server.register(users)
 server.register(postRoutes)
 server.register(commentRoutes)
 
-const port: number = parseInt(process.env.PORT) || 8000
-
 server.listen(
   {
-    port: port,
+    port: 3000,
   },
   (err, address) => {
     if (err) {
