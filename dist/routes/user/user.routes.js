@@ -70,6 +70,7 @@ async function users(fastify, options) {
                     message: "Login successfully",
                     data: {
                         access_token: token,
+                        userInfo: userLogin,
                     },
                 });
             }

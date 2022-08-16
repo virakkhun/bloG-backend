@@ -88,11 +88,13 @@ export default async function users(
 
       if (serealizePassword) {
         const token = await generateToken<typeof userLogin>(userLogin)
+
         return reply.send({
           statusCode: 200,
           message: "Login successfully",
           data: {
             access_token: token,
+            userInfo: userLogin,
           },
         })
       }
