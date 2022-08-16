@@ -23,8 +23,6 @@ main()
 
 server.register(cors, {
   origin: "*",
-  methods: ["GET", "POST"],
-  credentials: true,
 })
 
 server.register(fastifyMultipart)

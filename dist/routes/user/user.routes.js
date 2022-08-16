@@ -4,7 +4,7 @@ const hashing_1 = require("../../utils/hashing");
 const jwtService_1 = require("../../utils/jwtService");
 const prisma_instance_1 = require("../../utils/prisma.instance");
 async function users(fastify, options) {
-    fastify.get("/all-users", async (request, reply) => {
+    fastify.get("/api/all-users", async (request, reply) => {
         const users = await (0, prisma_instance_1.PrismaInstance)().user.findMany({
             include: {
                 posts: true,
@@ -14,7 +14,7 @@ async function users(fastify, options) {
             data: users,
         });
     });
-    fastify.post("/user/create", async (request, reply) => {
+    fastify.post("/api/user/create", async (request, reply) => {
         const { email, password, image, name } = request.body;
         const hashPassword = (0, hashing_1.createHashPassword)(password);
         const newUser = await (0, prisma_instance_1.PrismaInstance)().user.create({
@@ -38,7 +38,7 @@ async function users(fastify, options) {
             data: newUser,
         });
     });
-    fastify.post("/user/delete", async (request, reply) => {
+    fastify.post("/api/user/delete", async (request, reply) => {
         const { id } = request.query;
         const deleteUser = await (0, prisma_instance_1.PrismaInstance)().user.delete({
             where: {
@@ -56,7 +56,7 @@ async function users(fastify, options) {
             message: "Failed to delete",
         });
     });
-    fastify.post("/user/login", async (request, reply) => {
+    fastify.post("/api/user/login", async (request, reply) => {
         const { email, password } = request.body;
         const userLogin = await (0, prisma_instance_1.PrismaInstance)().user.findFirst({
             where: {

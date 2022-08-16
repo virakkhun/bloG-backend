@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jwtService_1 = require("../../utils/jwtService");
 const prisma_instance_1 = require("../../utils/prisma.instance");
 async function postRoutes(fastify, options) {
-    fastify.get("/all-posts", {
+    fastify.get("/api/all-posts", {
         onRequest: async (request, reply, done) => {
             const { token } = request.headers;
             const tokenIsVerify = await (0, jwtService_1.verifyToken)(token);
@@ -36,7 +36,7 @@ async function postRoutes(fastify, options) {
             data: [],
         });
     });
-    fastify.post("/post/create", async (request, reply) => {
+    fastify.post("/api/post/create", async (request, reply) => {
         const { body, slug, title, authodId } = request.body;
         const createPost = await (0, prisma_instance_1.PrismaInstance)().post.create({
             data: {

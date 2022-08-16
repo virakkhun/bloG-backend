@@ -7,7 +7,7 @@ export default async function commentRoutes(
   options: FastifyPluginOptions
 ) {
   fastify.post<{ Body: ICreateComment }>(
-    "/comment/create",
+    "/api/comment/create",
     async (request, reply) => {
       const { comment, postId } = request.body
 
