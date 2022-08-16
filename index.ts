@@ -24,7 +24,7 @@ main()
 server.register(cors, {
   origin: true,
   credentials: true,
-  allowedHeaders: ["Content-type", "Authorization"],
+  allowedHeaders: ["Content-type", "token"],
 })
 server.register(fastifyMultipart)
 
