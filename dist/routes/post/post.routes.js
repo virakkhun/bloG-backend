@@ -37,13 +37,13 @@ async function postRoutes(fastify, options) {
         });
     });
     fastify.post("/post/create", async (request, reply) => {
-        const { body, slug, title, authodId } = request.body;
+        const { body, slug, title, authorId } = request.body;
         const createPost = await (0, prisma_instance_1.PrismaInstance)().post.create({
             data: {
                 body: body,
                 slug: slug,
                 title: title,
-                authorId: authodId,
+                authorId: authorId,
             },
         });
         if (createPost) {

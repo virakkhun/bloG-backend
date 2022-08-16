@@ -26,7 +26,7 @@ main();
 server.register(cors_1.default, {
     origin: true,
     credentials: true,
-    allowedHeaders: ["Content-type", "Authorization"],
+    allowedHeaders: ["Content-type", "token"],
 });
 server.register(multipart_1.default);
 server.register(user_routes_1.default);
