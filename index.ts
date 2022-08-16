@@ -22,8 +22,9 @@ async function main() {
 main()
 
 server.register(cors, {
-  origin: "*",
+  origin: true,
   credentials: true,
+  allowedHeaders: ["Content-type", "Authorization"],
 })
 server.register(fastifyMultipart)
 
