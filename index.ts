@@ -4,6 +4,8 @@ import commentRoutes from "./routes/comment/comment.route"
 import postRoutes from "./routes/post/post.routes"
 import users from "./routes/user/user.routes"
 import "dotenv/config"
+import cors from "@fastify/cors"
+import fastifyMultipart from "@fastify/multipart"
 
 const server = fastify({
   logger: {
@@ -18,6 +20,14 @@ async function main() {
   await DatabaseInitial()
 }
 main()
+
+server.register(cors, {
+  origin: "*",
+  methods: ["GET", "POST"],
+  credentials: true,
+})
+
+server.register(fastifyMultipart)
 
 server.register(users)
 server.register(postRoutes)
