@@ -8,7 +8,7 @@ export default async function postRoutes(
   options: FastifyPluginOptions
 ) {
   fastify.get<{ Headers: { token: string } }>(
-    "/api/all-posts",
+    "/all-posts",
     {
       onRequest: async (request, reply, done) => {
         const { token } = request.headers
@@ -49,7 +49,7 @@ export default async function postRoutes(
   )
 
   fastify.post<{ Body: ICreatePost }>(
-    "/api/post/create",
+    "/post/create",
     async (request, reply) => {
       const { body, slug, title, authodId } = request.body
 

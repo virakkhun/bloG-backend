@@ -9,7 +9,7 @@ export default async function users(
   fastify: FastifyInstance,
   options: FastifyPluginOptions
 ) {
-  fastify.get("/api/all-users", async (request, reply) => {
+  fastify.get("/all-users", async (request, reply) => {
     const users = await PrismaInstance().user.findMany({
       include: {
         posts: true,
@@ -23,15 +23,13 @@ export default async function users(
 
   fastify.post<{
     Body: ICreateUser
-  }>("/api/user/create", async (request, reply) => {
-    const { email, password, image, name } = request.body
+  }>("/user/create", async (request, reply) => {
+    const { email, password } = request.body
     const hashPassword = createHashPassword(password)
     const newUser: User = await PrismaInstance().user.create({
       data: {
         email: email,
         password: hashPassword,
-        image: image,
-        name: name,
       },
     })
 
@@ -52,7 +50,7 @@ export default async function users(
 
   fastify.post<{
     Querystring: { id: string }
-  }>("/api/user/delete", async (request, reply) => {
+  }>("/user/delete", async (request, reply) => {
     const { id } = request.query
 
     const deleteUser = await PrismaInstance().user.delete({
@@ -76,7 +74,7 @@ export default async function users(
 
   fastify.post<{
     Body: ILoginUser
-  }>("/api/user/login", async (request, reply) => {
+  }>("/user/login", async (request, reply) => {
     const { email, password } = request.body
 
     const userLogin = await PrismaInstance().user.findFirst({
