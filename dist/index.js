@@ -24,7 +24,9 @@ async function main() {
 }
 main();
 server.register(cors_1.default, {
-    origin: "*",
+    origin: "http://localhost:8000",
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
 });
 server.register(multipart_1.default);
 server.register(user_routes_1.default);
