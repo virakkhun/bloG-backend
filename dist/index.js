@@ -26,7 +26,7 @@ async function main() {
 }
 main();
 exports.server.register(jwt_1.default, {
-    secret: (_a = process.env.JSECRET_KEY) !== null && _a !== void 0 ? _a : "",
+    secret: (_a = process.env.SECRET_KEY) !== null && _a !== void 0 ? _a : "",
 });
 exports.server.register(cors_1.default, {
     origin: true,

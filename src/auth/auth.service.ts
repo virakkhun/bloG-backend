@@ -16,7 +16,10 @@ export async function loginService(payload: ILoginUser) {
     const isMatchPassword = compareHash(password ?? "", user.password)
 
     if (isMatchPassword) {
-      const signToken = server.jwt.sign(user)
+      const { password, ...rest } = user
+      const signToken = server.jwt.sign(rest, {
+        expiresIn: 60 * 60 * 24 * 7,
+      })
 
       return signToken
     }
