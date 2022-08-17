@@ -1,4 +1,3 @@
-import { User } from "@prisma/client"
 import { FastifyReply, FastifyRequest } from "fastify"
 import { CommonMessage } from "../utils/message"
 import { CommonResponse } from "../utils/repsonse"
@@ -27,7 +26,7 @@ export async function createUser(
   reply: FastifyReply
 ) {
   const { email, password } = request.body
-  const newUser: User = await createOneUserService(email, password)
+  const newUser = await createOneUserService(email, password)
 
   if (!newUser) {
     return reply.send(
