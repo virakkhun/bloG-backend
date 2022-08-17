@@ -6,7 +6,7 @@ export const DatabaseInitial = async () => {
     .then(async () => {
       await PrismaInstance().$disconnect()
     })
-    .catch(async (e: unknown) => {
+    .catch(async (e: any) => {
       if (e) {
         await PrismaInstance().$disconnect()
         process.exit(1)
