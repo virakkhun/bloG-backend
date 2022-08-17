@@ -1,4 +1,8 @@
-export const CommonResponse = (code: number, msg: string, data: any) => {
+export const CommonResponse = <DataResponseType = {}>(
+  code: number,
+  msg: string,
+  data: DataResponseType
+) => {
   return {
     statusCode: code,
     message: msg,

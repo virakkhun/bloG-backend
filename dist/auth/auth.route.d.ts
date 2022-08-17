@@ -1,2 +1,2 @@
 import { FastifyInstance } from "fastify";
-export declare function authRoute(fastify: FastifyInstance): Promise<void>;
+export declare function authRoutes(fastify: FastifyInstance): Promise<void>;

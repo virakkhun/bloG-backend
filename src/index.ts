@@ -22,6 +22,16 @@ async function main() {
 }
 main()
 
+declare module "fastify" {
+  export interface FastifyInstance {
+    authenticate: any
+  }
+
+  export interface FastifyRequest {
+    file: any
+  }
+}
+
 server.register(fastifyJwt, {
   secret: process.env.SECRET_KEY ?? "",
 })
@@ -41,12 +51,19 @@ server.register(cors, {
   credentials: true,
   allowedHeaders: ["Content-type", "token"],
 })
-server.register(require("@fastify/multipart"))
 
-server.register(users)
-server.register(postRoutes)
-server.register(commentRoutes)
-server.register(authRoutes)
+server.register(users, {
+  prefix: "v1/user",
+})
+server.register(postRoutes, {
+  prefix: "v1/post",
+})
+server.register(commentRoutes, {
+  prefix: "v1/comment",
+})
+server.register(authRoutes, {
+  prefix: "v1/auth",
+})
 
 server.listen(
   {

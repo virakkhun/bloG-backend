@@ -1,5 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import { PostCommentService } from "./comment.service"
+import { CommonMessage } from "../utils/message"
+import { CommonResponse } from "../utils/repsonse"
+import { GlobalResponse } from "../utils/response.global"
+import { StatusCode } from "../utils/statusCode"
+import {
+  GetAllCommentInOnePostService,
+  PostCommentService,
+} from "./comment.service"
 import { ICreateComment } from "./comment.type"
 
 export async function PostComment(
@@ -26,4 +33,25 @@ export async function PostComment(
     message: "Failed to create comment!",
     data: [],
   })
+}
+
+export async function GetAllCommentInOnePost(
+  request: FastifyRequest<{
+    Querystring: { id: string }
+  }>,
+  reply: FastifyReply
+): Promise<GlobalResponse> {
+  const comments = await GetAllCommentInOnePostService(request.query.id)
+
+  if (comments) {
+    return reply.send(
+      CommonResponse<typeof comments>(
+        StatusCode.success,
+        CommonMessage.get,
+        comments
+      )
+    )
+  }
+
+  return reply.send(CommonResponse(StatusCode.failed, CommonMessage.failed, ""))
 }

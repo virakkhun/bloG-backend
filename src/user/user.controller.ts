@@ -2,15 +2,22 @@ import { User } from "@prisma/client"
 import { FastifyReply, FastifyRequest } from "fastify"
 import { CommonMessage } from "../utils/message"
 import { CommonResponse } from "../utils/repsonse"
+import { GlobalResponse } from "../utils/response.global"
 import { StatusCode } from "../utils/statusCode"
-import { createOneUser, deleteOneUser, fineOneByEmail } from "./user.service"
-import { ICreateUser } from "./user.type"
+import {
+  createOneUserService,
+  deleteOneUserService,
+  fineOneByEmailService,
+  updateOneUserService,
+  uploadImageService,
+} from "./user.service"
+import { ICreateUser, IUpdateUser } from "./user.type"
 
 export async function getUser(
   request: FastifyRequest<{ Body: { email: string } }>,
   reply: FastifyReply
 ) {
-  const user = await fineOneByEmail(request.body.email)
+  const user = await fineOneByEmailService(request.body.email)
 
   return reply.send(CommonResponse(StatusCode.success, CommonMessage.get, user))
 }
@@ -20,7 +27,7 @@ export async function createUser(
   reply: FastifyReply
 ) {
   const { email, password } = request.body
-  const newUser: User = await createOneUser(email, password)
+  const newUser: User = await createOneUserService(email, password)
 
   if (!newUser) {
     return reply.send(
@@ -41,11 +48,56 @@ export async function deleteUser(
   }>,
   reply: FastifyReply
 ) {
-  const isDeleteSuccess = await deleteOneUser(request.query.id)
+  const isDeleteSuccess = await deleteOneUserService(request.query.id)
 
   if (isDeleteSuccess) {
     return reply.send(
       CommonResponse(StatusCode.success, CommonMessage.deleted, isDeleteSuccess)
+    )
+  }
+
+  return reply.send(CommonResponse(StatusCode.failed, CommonMessage.failed, ""))
+}
+
+export async function updateOneUser(
+  request: FastifyRequest<{
+    Querystring: {
+      id: string
+    }
+    Body: IUpdateUser
+  }>,
+  reply: FastifyReply
+): Promise<GlobalResponse> {
+  const update = await updateOneUserService(request.query.id, request.body)
+
+  if (update) {
+    return reply.send(
+      CommonResponse<typeof update>(
+        StatusCode.success,
+        CommonMessage.updated,
+        update
+      )
+    )
+  }
+
+  return reply.send(CommonResponse(StatusCode.failed, CommonMessage.failed, ""))
+}
+
+export async function UploadImage(
+  request: FastifyRequest<{
+    Querystring: {
+      id: string
+    }
+  }>,
+  reply: FastifyReply
+): Promise<GlobalResponse> {
+  const data: any = request.file
+  const imageName = `${Date.now()}${data.originalname}`
+
+  const upload = await uploadImageService(request.query.id, imageName)
+  if (upload) {
+    return reply.send(
+      CommonResponse(StatusCode.success, CommonMessage.created, "")
     )
   }
 

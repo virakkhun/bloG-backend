@@ -9,3 +9,11 @@ export async function PostCommentService(payload: ICreateComment) {
     },
   })
 }
+
+export async function GetAllCommentInOnePostService(postId: string) {
+  return await PrismaInstance().comment.findMany({
+    where: {
+      postId: postId,
+    },
+  })
+}

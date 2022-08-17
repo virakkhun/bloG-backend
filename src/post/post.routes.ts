@@ -1,11 +1,43 @@
 import { FastifyInstance } from "fastify"
-import { CreateOnePost, GetAllPostWithComment } from "./post.controller"
+import {
+  CreateOnePost,
+  DeleteOnePost,
+  GetAllPostWithComment,
+  UpdateOnePost,
+} from "./post.controller"
 
 export default async function postRoutes(fastify: FastifyInstance) {
+  //** Get all post */
   fastify.get(
-    "/all-posts",
-    { onRequest: [fastify.authenticate] },
+    "/all",
+    { preHandler: [fastify.authenticate] },
     GetAllPostWithComment
   )
-  fastify.post("/post/create", CreateOnePost)
+
+  //** Create one post */
+  fastify.post(
+    "/create",
+    {
+      preHandler: [fastify.authenticate],
+    },
+    CreateOnePost
+  )
+
+  //** Delete one post by ID */
+  fastify.post(
+    "/delete",
+    {
+      preHandler: [fastify.authenticate],
+    },
+    DeleteOnePost
+  )
+
+  //** Update one post by ID */
+  fastify.post(
+    "/update",
+    {
+      preHandler: [fastify.authenticate],
+    },
+    UpdateOnePost
+  )
 }

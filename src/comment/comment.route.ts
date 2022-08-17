@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify"
-import { PostComment } from "./comment.controller"
+import { GetAllCommentInOnePost, PostComment } from "./comment.controller"
 
 export default async function commentRoutes(fastify: FastifyInstance) {
-  fastify.post("/comment/create", PostComment)
+  fastify.post("/create", PostComment)
+  fastify.get("/post", GetAllCommentInOnePost)
 }

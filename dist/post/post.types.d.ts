@@ -4,3 +4,5 @@ export interface ICreatePost {
     body: string;
     authorId: string;
 }
+export interface IUpdatePost extends Partial<ICreatePost> {
+}
