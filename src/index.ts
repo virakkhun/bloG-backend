@@ -49,7 +49,7 @@ server.decorate(
 server.register(cors, {
   origin: true,
   credentials: true,
-  allowedHeaders: ["Content-type", "token"],
+  allowedHeaders: ["Content-type", "Authorization", "authorization"],
 })
 
 server.register(users, {
