@@ -18,7 +18,7 @@ const upload = (0, fastify_multer_1.default)({
 });
 async function users(fastify) {
     fastify.register(fastify_multer_1.default.contentParser);
-    fastify.get("/info", {
+    fastify.post("/info", {
         preHandler: [fastify.authenticate],
     }, user_controller_1.getUser);
     fastify.post("/create", user_controller_1.createUser);

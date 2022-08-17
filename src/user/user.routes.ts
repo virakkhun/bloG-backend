@@ -23,7 +23,7 @@ const upload = multer({
 
 export default async function users(fastify: FastifyInstance) {
   fastify.register(multer.contentParser)
-  fastify.get(
+  fastify.post(
     "/info",
     {
       preHandler: [fastify.authenticate],
