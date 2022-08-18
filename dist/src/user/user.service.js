@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadImageService = exports.updateOneUserService = exports.deleteOneUserService = exports.createOneUserService = exports.fineOneByEmailService = void 0;
+exports.findOneUserByIdService = exports.uploadImageService = exports.updateOneUserService = exports.deleteOneUserService = exports.createOneUserService = exports.fineOneByEmailService = void 0;
 const hashing_1 = require("../utils/hashing");
 const prisma_instance_1 = require("../utils/prisma.instance");
 async function fineOneByEmailService(email) {
@@ -54,4 +54,12 @@ async function uploadImageService(id, imageName) {
     });
 }
 exports.uploadImageService = uploadImageService;
+async function findOneUserByIdService(id) {
+    return await (0, prisma_instance_1.PrismaInstance)().user.findUnique({
+        where: {
+            id: id,
+        },
+    });
+}
+exports.findOneUserByIdService = findOneUserByIdService;
 //# sourceMappingURL=user.service.js.map

@@ -1,13 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePostService = exports.deletePostService = exports.createOnePostService = exports.getAllPostWithComementService = void 0;
+exports.getPostWithCommentService = exports.updatePostService = exports.deletePostService = exports.createOnePostService = exports.getAllPostWithComementService = void 0;
 const prisma_instance_1 = require("../utils/prisma.instance");
 async function getAllPostWithComementService() {
-    return await (0, prisma_instance_1.PrismaInstance)().post.findMany({
-        include: {
-            comment: true,
-        },
-    });
+    return await (0, prisma_instance_1.PrismaInstance)().post.findMany();
 }
 exports.getAllPostWithComementService = getAllPostWithComementService;
 async function createOnePostService(payload) {
@@ -42,4 +38,15 @@ async function updatePostService(id, payload) {
     });
 }
 exports.updatePostService = updatePostService;
+async function getPostWithCommentService(id) {
+    return await (0, prisma_instance_1.PrismaInstance)().post.findUnique({
+        where: {
+            id: id,
+        },
+        include: {
+            comment: true,
+        },
+    });
+}
+exports.getPostWithCommentService = getPostWithCommentService;
 //# sourceMappingURL=post.service.js.map

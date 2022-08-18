@@ -52,3 +52,11 @@ export async function uploadImageService(id: string, imageName: string) {
     },
   })
 }
+
+export async function findOneUserByIdService(id: string) {
+  return await PrismaInstance().user.findUnique({
+    where: {
+      id: id,
+    },
+  })
+}
