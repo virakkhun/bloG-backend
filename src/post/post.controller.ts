@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify"
+import { findOneUserByIdService } from "../user/user.service"
 import { CommonMessage } from "../utils/message"
 import { CommonResponse } from "../utils/repsonse"
 import { GlobalResponse } from "../utils/response.global"
@@ -7,6 +8,7 @@ import {
   createOnePostService,
   deletePostService,
   getAllPostWithComementService,
+  getPostWithCommentService,
   updatePostService,
 } from "./post.service"
 import { ICreatePost, IUpdatePost } from "./post.types"
@@ -72,4 +74,28 @@ export async function UpdateOnePost(
   }
 
   throw new Error(CommonMessage.failed)
+}
+
+export async function GetPostWithComment(
+  request: FastifyRequest<{
+    Querystring: {
+      postId: string
+    }
+  }>,
+  reply: FastifyReply
+): Promise<GlobalResponse> {
+  const post = await getPostWithCommentService(request.query.postId)
+  if (post) {
+    const user = await findOneUserByIdService(post.authorId)
+    if (user) {
+      return reply.send(
+        CommonResponse(StatusCode.success, CommonMessage.get, {
+          post: post,
+          user: user,
+        })
+      )
+    }
+  }
+
+  return reply.send(CommonResponse(StatusCode.failed, CommonMessage.failed, {}))
 }

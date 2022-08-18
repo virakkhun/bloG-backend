@@ -16,6 +16,9 @@ async function postRoutes(fastify) {
     fastify.post("/update", {
         preHandler: [fastify.authenticate],
     }, post_controller_1.UpdateOnePost);
+    fastify.get("/detail", {
+        preHandler: [fastify.authenticate],
+    }, post_controller_1.GetPostWithComment);
 }
 exports.default = postRoutes;
 //# sourceMappingURL=post.routes.js.map

@@ -3,6 +3,7 @@ import {
   CreateOnePost,
   DeleteOnePost,
   GetAllPostWithComment,
+  GetPostWithComment,
   UpdateOnePost,
 } from "./post.controller"
 
@@ -39,5 +40,13 @@ export default async function postRoutes(fastify: FastifyInstance) {
       preHandler: [fastify.authenticate],
     },
     UpdateOnePost
+  )
+
+  fastify.get(
+    "/detail",
+    {
+      preHandler: [fastify.authenticate],
+    },
+    GetPostWithComment
   )
 }

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateOnePost = exports.DeleteOnePost = exports.CreateOnePost = exports.GetAllPostWithComment = void 0;
+exports.GetPostWithComment = exports.UpdateOnePost = exports.DeleteOnePost = exports.CreateOnePost = exports.GetAllPostWithComment = void 0;
+const user_service_1 = require("../user/user.service");
 const message_1 = require("../utils/message");
 const repsonse_1 = require("../utils/repsonse");
 const statusCode_1 = require("../utils/statusCode");
@@ -37,4 +38,18 @@ async function UpdateOnePost(request, reply) {
     throw new Error(message_1.CommonMessage.failed);
 }
 exports.UpdateOnePost = UpdateOnePost;
+async function GetPostWithComment(request, reply) {
+    const post = await (0, post_service_1.getPostWithCommentService)(request.query.postId);
+    if (post) {
+        const user = await (0, user_service_1.findOneUserByIdService)(post.authorId);
+        if (user) {
+            return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.success, message_1.CommonMessage.get, {
+                post: post,
+                user: user,
+            }));
+        }
+    }
+    return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.failed, message_1.CommonMessage.failed, {}));
+}
+exports.GetPostWithComment = GetPostWithComment;
 //# sourceMappingURL=post.controller.js.map
