@@ -7,7 +7,7 @@ const user_controller_1 = require("./user.controller");
 const fastify_multer_1 = __importDefault(require("fastify-multer"));
 const storage = fastify_multer_1.default.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "./src/images/");
+        cb(null, "./");
     },
     filename: function (req, file, cb) {
         cb(null, `${Date.now()}${file.originalname}`);
