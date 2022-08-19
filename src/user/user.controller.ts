@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify"
+import { UploadServiceToS3Storage } from "../storage/s3.service"
 import { CommonMessage } from "../utils/message"
 import { CommonResponse } from "../utils/repsonse"
 import { GlobalResponse } from "../utils/response.global"
@@ -90,10 +91,9 @@ export async function UploadImage(
   }>,
   reply: FastifyReply
 ): Promise<GlobalResponse> {
-  const data: any = request.file
-  const imageName = `${Date.now()}${data.originalname}`
+  const data = await UploadServiceToS3Storage(request.file)
 
-  const upload = await uploadImageService(request.query.id, imageName)
+  const upload = await uploadImageService(request.query.id, data.Location)
   if (upload) {
     return reply.send(
       CommonResponse(StatusCode.success, CommonMessage.created, "")
