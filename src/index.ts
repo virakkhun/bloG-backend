@@ -7,6 +7,7 @@ import "dotenv/config"
 import cors from "@fastify/cors"
 import fastifyJwt from "@fastify/jwt"
 import { authRoutes } from "./auth/auth.route"
+import multer from "fastify-multer"
 
 export const server = fastify({
   logger: {
@@ -48,8 +49,7 @@ server.decorate(
 
 server.register(cors, {
   origin: true,
-  credentials: true,
-  allowedHeaders: ["Content-type", "Authorization", "authorization"],
+  allowedHeaders: ["Content-type", "Authorization"],
 })
 
 server.register(users, {

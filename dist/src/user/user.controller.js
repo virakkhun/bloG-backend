@@ -40,7 +40,7 @@ async function UploadImage(request, reply) {
     const data = await (0, s3_service_1.UploadServiceToS3Storage)(request.file);
     const upload = await (0, user_service_1.uploadImageService)(request.query.id, data.Location);
     if (upload) {
-        return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.success, message_1.CommonMessage.created, ""));
+        return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.success, message_1.CommonMessage.created, upload));
     }
     return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.failed, message_1.CommonMessage.failed, ""));
 }

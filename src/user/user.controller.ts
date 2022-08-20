@@ -90,13 +90,13 @@ export async function UploadImage(
     }
   }>,
   reply: FastifyReply
-): Promise<GlobalResponse> {
+) {
   const data = await UploadServiceToS3Storage(request.file)
 
   const upload = await uploadImageService(request.query.id, data.Location)
   if (upload) {
     return reply.send(
-      CommonResponse(StatusCode.success, CommonMessage.created, "")
+      CommonResponse(StatusCode.success, CommonMessage.created, upload)
     )
   }
 

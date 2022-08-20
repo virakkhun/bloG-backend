@@ -15,6 +15,7 @@
     "@fastify/cors": "^8.1.0",
     "@fastify/helmet": "^9.1.0",
     "@fastify/jwt": "^6.3.2",
+    "@fastify/multipart": "^6.0.0",
     "@prisma/client": "^4.2.1",
     "@types/jsonwebtoken": "^8.5.8",
     "aws-sdk": "^2.1198.0",

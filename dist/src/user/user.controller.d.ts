@@ -24,4 +24,4 @@ export declare function UploadImage(request: FastifyRequest<{
     Querystring: {
         id: string;
     };
-}>, reply: FastifyReply): Promise<GlobalResponse>;
+}>, reply: FastifyReply): Promise<never>;
