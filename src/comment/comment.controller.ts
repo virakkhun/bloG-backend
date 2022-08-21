@@ -21,18 +21,22 @@ export async function PostComment(
   })
 
   if (newComment) {
-    return reply.send({
-      statusCode: 200,
-      message: "Create comment successfully",
-      data: newComment,
-    })
+    return reply.send(
+      CommonResponse<typeof newComment>(
+        StatusCode.success,
+        CommonMessage.get,
+        newComment
+      )
+    )
   }
 
-  return reply.send({
-    statusCode: 401,
-    message: "Failed to create comment!",
-    data: [],
-  })
+  return reply.send(
+    CommonResponse<typeof Array[]>(
+      StatusCode.failed,
+      CommonMessage.failed,
+      []
+    )
+  )
 }
 
 export async function GetAllCommentInOnePost(
@@ -53,5 +57,11 @@ export async function GetAllCommentInOnePost(
     )
   }
 
-  return reply.send(CommonResponse(StatusCode.failed, CommonMessage.failed, ""))
+  return reply.send(
+    CommonResponse(
+      StatusCode.failed,
+      CommonMessage.failed,
+      {  }
+    )
+  )
 }

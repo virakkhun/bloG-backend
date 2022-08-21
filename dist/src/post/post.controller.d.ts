@@ -16,7 +16,7 @@ export declare function UpdateOnePost(request: FastifyRequest<{
     };
     Body: IUpdatePost;
 }>, reply: FastifyReply): Promise<GlobalResponse>;
-export declare function GetPostWithComment(request: FastifyRequest<{
+export declare function GetPostDetail(request: FastifyRequest<{
     Querystring: {
         postId: string;
     };

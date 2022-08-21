@@ -39,7 +39,7 @@ exports.server.decorate("authenticate", async (request, reply) => {
 });
 exports.server.register(cors_1.default, {
     origin: true,
-    allowedHeaders: ["Content-type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 });
 exports.server.register(user_routes_1.default, {
     prefix: "v1/user",

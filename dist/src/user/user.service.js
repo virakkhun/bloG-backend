@@ -49,7 +49,7 @@ async function uploadImageService(id, imageName) {
             id: id,
         },
         data: {
-            image: imageName,
+            authorImage: imageName,
         },
     });
 }

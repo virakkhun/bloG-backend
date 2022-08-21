@@ -1,4 +1,15 @@
 "use strict";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UploadImage = exports.updateOneUser = exports.deleteUser = exports.createUser = exports.getUser = void 0;
 const s3_service_1 = require("../storage/s3.service");
@@ -8,7 +19,11 @@ const statusCode_1 = require("../utils/statusCode");
 const user_service_1 = require("./user.service");
 async function getUser(request, reply) {
     const user = await (0, user_service_1.fineOneByEmailService)(request.body.email);
-    return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.success, message_1.CommonMessage.get, user));
+    if (user) {
+        const { password } = user, rest = __rest(user, ["password"]);
+        return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.success, message_1.CommonMessage.get, rest));
+    }
+    return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.failed, message_1.CommonMessage.failed, {}));
 }
 exports.getUser = getUser;
 async function createUser(request, reply) {
@@ -29,9 +44,10 @@ async function deleteUser(request, reply) {
 }
 exports.deleteUser = deleteUser;
 async function updateOneUser(request, reply) {
-    const update = await (0, user_service_1.updateOneUserService)(request.query.id, request.body);
-    if (update) {
-        return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.success, message_1.CommonMessage.updated, update));
+    const updateUser = await (0, user_service_1.updateOneUserService)(request.query.id, request.body);
+    if (updateUser) {
+        const { password } = updateUser, data = __rest(updateUser, ["password"]);
+        return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.success, message_1.CommonMessage.updated, data));
     }
     return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.failed, message_1.CommonMessage.failed, ""));
 }
@@ -40,7 +56,7 @@ async function UploadImage(request, reply) {
     const data = await (0, s3_service_1.UploadServiceToS3Storage)(request.file);
     const upload = await (0, user_service_1.uploadImageService)(request.query.id, data.Location);
     if (upload) {
-        return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.success, message_1.CommonMessage.created, upload));
+        return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.success, message_1.CommonMessage.created, {}));
     }
     return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.failed, message_1.CommonMessage.failed, ""));
 }
