@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify"
+import { UploadServiceToS3Storage } from "../storage/s3.service"
 import { findOneUserByIdService } from "../user/user.service"
 import { CommonMessage } from "../utils/message"
 import { CommonResponse } from "../utils/repsonse"
@@ -7,7 +8,7 @@ import { StatusCode } from "../utils/statusCode"
 import {
   createOnePostService,
   deletePostService,
-  getAllPostWithComementService,
+  getAllPostWithCommentService,
   getPostWithCommentService,
   updatePostService,
 } from "./post.service"
@@ -17,30 +18,59 @@ export async function GetAllPostWithComment(
   request: FastifyRequest,
   reply: FastifyReply
 ): Promise<GlobalResponse> {
-  const allPosts = await getAllPostWithComementService()
-
+  const allPosts = await getAllPostWithCommentService()
   if (allPosts.length !== 0) {
+    let data: Partial<GlobalResponse>[] = []
+    allPosts.forEach((post) => {
+      const { id, body, slug, title, authorId, images } = post
+      const { name, status, authorImage } = post.author
+      data.push({
+        id,
+        body,
+        slug,
+        title,
+        authorId,
+        name,
+        status,
+        images,
+        authorImage,
+      })
+    })
     return reply.send(
-      CommonResponse(StatusCode.success, CommonMessage.get, allPosts)
+      CommonResponse(StatusCode.success, CommonMessage.get, data)
     )
   }
 
-  return reply.send(CommonResponse(StatusCode.failed, CommonMessage.failed, ""))
+  return reply.send(CommonResponse(StatusCode.failed, CommonMessage.failed, {}))
 }
 
 export async function CreateOnePost(
   request: FastifyRequest<{ Body: ICreatePost }>,
   reply: FastifyReply
 ): Promise<GlobalResponse> {
-  const post = await createOnePostService(request.body)
+  const data = await UploadServiceToS3Storage(request.file)
+  const images = data.Location
+  const { authorId, body, slug, title } = request.body
+
+  const post = await createOnePostService({
+    authorId,
+    body,
+    slug,
+    title,
+    images,
+  })
 
   if (post) {
     return reply.send(
-      CommonResponse(StatusCode.success, CommonMessage.created, post)
+      CommonResponse<typeof post>(
+        StatusCode.success,
+        CommonMessage.created,
+        post
+      )
     )
   }
 
-  return reply.send(CommonResponse(StatusCode.failed, CommonMessage.failed, ""))
+  return reply.send(CommonResponse(StatusCode.failed, CommonMessage.failed, {}))
 }
 
 export async function DeleteOnePost(
@@ -51,7 +81,7 @@ export async function DeleteOnePost(
 
   if (deletePost) {
     return reply.send(
-      CommonResponse(StatusCode.success, CommonMessage.deleted, "")
+      CommonResponse(StatusCode.success, CommonMessage.deleted, {})
     )
   }
 
@@ -76,7 +106,7 @@ export async function UpdateOnePost(
   throw new Error(CommonMessage.failed)
 }
 
-export async function GetPostWithComment(
+export async function GetPostDetail(
   request: FastifyRequest<{
     Querystring: {
       postId: string
@@ -88,10 +118,15 @@ export async function GetPostWithComment(
   if (post) {
     const user = await findOneUserByIdService(post.authorId)
     if (user) {
+      const { name, status, authorImage } = user
       return reply.send(
         CommonResponse(StatusCode.success, CommonMessage.get, {
           post: post,
-          user: user,
+          user: {
+            name,
+            status,
+            authorImage,
+          },
         })
       )
     }

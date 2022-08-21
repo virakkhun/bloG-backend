@@ -48,7 +48,7 @@ export async function uploadImageService(id: string, imageName: string) {
       id: id,
     },
     data: {
-      image: imageName,
+      authorImage: imageName,
     },
   })
 }

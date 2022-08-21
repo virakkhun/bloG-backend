@@ -12,17 +12,9 @@ async function PostComment(request, reply) {
         postId: postId,
     });
     if (newComment) {
-        return reply.send({
-            statusCode: 200,
-            message: "Create comment successfully",
-            data: newComment,
-        });
+        return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.success, message_1.CommonMessage.get, newComment));
     }
-    return reply.send({
-        statusCode: 401,
-        message: "Failed to create comment!",
-        data: [],
-    });
+    return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.failed, message_1.CommonMessage.failed, []));
 }
 exports.PostComment = PostComment;
 async function GetAllCommentInOnePost(request, reply) {
@@ -30,7 +22,7 @@ async function GetAllCommentInOnePost(request, reply) {
     if (comments) {
         return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.success, message_1.CommonMessage.get, comments));
     }
-    return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.failed, message_1.CommonMessage.failed, ""));
+    return reply.send((0, repsonse_1.CommonResponse)(statusCode_1.StatusCode.failed, message_1.CommonMessage.failed, {}));
 }
 exports.GetAllCommentInOnePost = GetAllCommentInOnePost;
 //# sourceMappingURL=comment.controller.js.map

@@ -1,8 +1,15 @@
 import { PrismaInstance } from "../utils/prisma.instance"
 import { ICreatePost, IUpdatePost } from "./post.types"
 
-export async function getAllPostWithComementService() {
-  return await PrismaInstance().post.findMany()
+export async function getAllPostWithCommentService() {
+  return await PrismaInstance().post.findMany({
+    include: {
+      author: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  })
 }
 
 export async function createOnePostService(payload: ICreatePost) {
@@ -12,6 +19,8 @@ export async function createOnePostService(payload: ICreatePost) {
       slug: payload.slug,
       title: payload.title,
       authorId: payload.authorId,
+      createdAt: new Date().toISOString(),
+      images: payload.images,
     },
   })
 }
@@ -41,9 +50,6 @@ export async function getPostWithCommentService(id: string) {
   return await PrismaInstance().post.findUnique({
     where: {
       id: id,
-    },
-    include: {
-      comment: true,
     },
   })
 }

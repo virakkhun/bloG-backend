@@ -16,16 +16,32 @@ import { ICreateUser, IUpdateUser } from "./user.type"
 export async function getUser(
   request: FastifyRequest<{ Body: { email: string } }>,
   reply: FastifyReply
-) {
+): Promise<GlobalResponse> {
   const user = await fineOneByEmailService(request.body.email)
+  if(user) {
+    const {password, ...rest} = user
+    return reply.send(
+      CommonResponse<typeof rest>(
+        StatusCode.success,
+        CommonMessage.get,
+        rest
+      )
+    )
+  }
 
-  return reply.send(CommonResponse(StatusCode.success, CommonMessage.get, user))
+  return reply.send(
+    CommonResponse(
+      StatusCode.failed,
+      CommonMessage.failed,
+      {}
+    )
+  )
 }
 
 export async function createUser(
   request: FastifyRequest<{ Body: ICreateUser }>,
   reply: FastifyReply
-) {
+): Promise<GlobalResponse> {
   const { email, password } = request.body
   const newUser = await createOneUserService(email, password)
 
@@ -36,7 +52,7 @@ export async function createUser(
   }
 
   return reply.send(
-    CommonResponse(StatusCode.success, CommonMessage.created, newUser)
+    CommonResponse<typeof newUser>(StatusCode.success, CommonMessage.created, newUser)
   )
 }
 
@@ -47,7 +63,7 @@ export async function deleteUser(
     }
   }>,
   reply: FastifyReply
-) {
+): Promise<GlobalResponse> {
   const isDeleteSuccess = await deleteOneUserService(request.query.id)
 
   if (isDeleteSuccess) {
@@ -68,19 +84,25 @@ export async function updateOneUser(
   }>,
   reply: FastifyReply
 ): Promise<GlobalResponse> {
-  const update = await updateOneUserService(request.query.id, request.body)
-
-  if (update) {
+  const updateUser = await updateOneUserService(request.query.id, request.body)
+  if (updateUser) {
+    const { password, ...data } = updateUser
     return reply.send(
-      CommonResponse<typeof update>(
+      CommonResponse<typeof data>(
         StatusCode.success,
         CommonMessage.updated,
-        update
+        data
       )
     )
   }
 
-  return reply.send(CommonResponse(StatusCode.failed, CommonMessage.failed, ""))
+  return reply.send(
+    CommonResponse(
+      StatusCode.failed,
+      CommonMessage.failed,
+      ""
+    )
+  )
 }
 
 export async function UploadImage(
@@ -96,9 +118,19 @@ export async function UploadImage(
   const upload = await uploadImageService(request.query.id, data.Location)
   if (upload) {
     return reply.send(
-      CommonResponse(StatusCode.success, CommonMessage.created, upload)
+      CommonResponse(
+        StatusCode.success,
+        CommonMessage.created,
+        {},
+      )
     )
   }
 
-  return reply.send(CommonResponse(StatusCode.failed, CommonMessage.failed, ""))
+  return reply.send(
+    CommonResponse(
+      StatusCode.failed,
+      CommonMessage.failed,
+      ""
+    )
+  )
 }

@@ -1,11 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPostWithCommentService = exports.updatePostService = exports.deletePostService = exports.createOnePostService = exports.getAllPostWithComementService = void 0;
+exports.getPostWithCommentService = exports.updatePostService = exports.deletePostService = exports.createOnePostService = exports.getAllPostWithCommentService = void 0;
 const prisma_instance_1 = require("../utils/prisma.instance");
-async function getAllPostWithComementService() {
-    return await (0, prisma_instance_1.PrismaInstance)().post.findMany();
+async function getAllPostWithCommentService() {
+    return await (0, prisma_instance_1.PrismaInstance)().post.findMany({
+        include: {
+            author: true,
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
 }
-exports.getAllPostWithComementService = getAllPostWithComementService;
+exports.getAllPostWithCommentService = getAllPostWithCommentService;
 async function createOnePostService(payload) {
     return await (0, prisma_instance_1.PrismaInstance)().post.create({
         data: {
@@ -13,6 +20,8 @@ async function createOnePostService(payload) {
             slug: payload.slug,
             title: payload.title,
             authorId: payload.authorId,
+            createdAt: new Date().toISOString(),
+            images: payload.images,
         },
     });
 }
@@ -42,9 +51,6 @@ async function getPostWithCommentService(id) {
     return await (0, prisma_instance_1.PrismaInstance)().post.findUnique({
         where: {
             id: id,
-        },
-        include: {
-            comment: true,
         },
     });
 }

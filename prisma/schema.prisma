@@ -8,13 +8,15 @@ datasource db {
 }
 
 model Post {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  slug     String    @unique
-  title    String
-  body     String
-  comment  Comment[]
-  author   User      @relation(fields: [authorId], references: [id])
-  authorId String    @db.ObjectId
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  slug      String    @unique
+  title     String
+  body      String
+  images    String
+  comment   Comment[]
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String    @db.ObjectId
+  createdAt DateTime  @default(now())
 }
 
 model Comment {
@@ -25,13 +27,13 @@ model Comment {
 }
 
 model User {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  email    String   @unique
-  name     String?
-  age      Int?
-  gender   String?
-  password String
-  image    String?
-  posts    Post[]
-  status   Boolean? @default(true)
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  email       String   @unique
+  name        String?
+  age         Int?
+  gender      String?
+  password    String
+  authorImage String?
+  posts       Post[]
+  status      Boolean? @default(true)
 }
