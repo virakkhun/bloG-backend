@@ -67,7 +67,7 @@ server.register(authRoutes, {
 
 server.listen(
   {
-    port: parseInt(process.env.PORT!) || 8000,
+    port: parseInt(process.env.PORT!) || 3001,
     host: "0.0.0.0",
   },
   (err, address) => {
