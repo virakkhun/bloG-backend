@@ -1,8 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import { CommonMessage } from "../utils/message"
-import { CommonResponse } from "../utils/repsonse"
 import { GlobalResponse } from "../utils/response.global"
-import { StatusCode } from "../utils/statusCode"
 import {
   GetAllCommentInOnePostService,
   PostCommentService,
@@ -15,27 +12,11 @@ export async function PostComment(
 ) {
   const { comment, postId } = request.body
 
-  const newComment = await PostCommentService({
-    comment: comment,
-    postId: postId,
-  })
-
-  if (newComment) {
-    return reply.send(
-      CommonResponse<typeof newComment>(
-        StatusCode.success,
-        CommonMessage.get,
-        newComment
-      )
-    )
-  }
-
   return reply.send(
-    CommonResponse<typeof Array[]>(
-      StatusCode.failed,
-      CommonMessage.failed,
-      []
-    )
+    await PostCommentService({
+      comment: comment,
+      postId: postId,
+    })
   )
 }
 
@@ -45,23 +26,5 @@ export async function GetAllCommentInOnePost(
   }>,
   reply: FastifyReply
 ): Promise<GlobalResponse> {
-  const comments = await GetAllCommentInOnePostService(request.query.id)
-
-  if (comments) {
-    return reply.send(
-      CommonResponse<typeof comments>(
-        StatusCode.success,
-        CommonMessage.get,
-        comments
-      )
-    )
-  }
-
-  return reply.send(
-    CommonResponse(
-      StatusCode.failed,
-      CommonMessage.failed,
-      {  }
-    )
-  )
+  return reply.send(await GetAllCommentInOnePostService(request.query.id))
 }
