@@ -1,8 +1,10 @@
+import { Post, User } from "@prisma/client"
 import { PrismaInstance } from "../utils/prisma.instance"
+import { CommonResponse } from "../utils/repsonse"
 import { ICreatePost, IUpdatePost } from "./post.types"
 
-export async function getAllPostWithCommentService() {
-  return await PrismaInstance().post.findMany({
+export async function getAllPostService() {
+  const allPosts = await PrismaInstance().post.findMany({
     include: {
       author: true,
     },
@@ -10,10 +12,42 @@ export async function getAllPostWithCommentService() {
       createdAt: "desc",
     },
   })
+
+  if (allPosts.length === 0) {
+    return CommonResponse({
+      code: 401,
+      data: null,
+      msg: "Failed",
+    })
+  }
+
+  let data: Partial<Post & User>[] = []
+
+  allPosts.forEach((post) => {
+    const { id, body, slug, title, authorId, images } = post
+    const { name, status, authorImage } = post.author
+    data.push({
+      id,
+      body,
+      slug,
+      title,
+      authorId,
+      name,
+      status,
+      images,
+      authorImage,
+    })
+  })
+
+  return CommonResponse({
+    code: 200,
+    msg: "Get Successfully",
+    data: data,
+  })
 }
 
 export async function createOnePostService(payload: ICreatePost) {
-  return await PrismaInstance().post.create({
+  const post = await PrismaInstance().post.create({
     data: {
       body: payload.body,
       slug: payload.slug,
@@ -23,18 +57,46 @@ export async function createOnePostService(payload: ICreatePost) {
       images: payload.images,
     },
   })
+
+  if (!post) {
+    return CommonResponse({
+      code: 401,
+      msg: "Failed",
+      data: null,
+    })
+  }
+
+  return CommonResponse({
+    code: 200,
+    msg: "Created Successfully",
+    data: post,
+  })
 }
 
 export async function deletePostService(id: string) {
-  return await PrismaInstance().post.delete({
+  const deletePost = await PrismaInstance().post.delete({
     where: {
       id: id,
     },
   })
+
+  if (!deletePost) {
+    return CommonResponse({
+      code: 401,
+      msg: "Failed",
+      data: null,
+    })
+  }
+
+  return CommonResponse({
+    code: 200,
+    msg: "Deleted Successfully",
+    data: deletePost,
+  })
 }
 
 export async function updatePostService(id: string, payload: IUpdatePost) {
-  return await PrismaInstance().post.update({
+  const update = await PrismaInstance().post.update({
     where: {
       id: id,
     },
@@ -44,12 +106,44 @@ export async function updatePostService(id: string, payload: IUpdatePost) {
       slug: payload.slug,
     },
   })
+
+  if (!update) {
+    return CommonResponse({
+      code: 401,
+      msg: "Failed",
+      data: null,
+    })
+  }
+
+  return CommonResponse({
+    code: 200,
+    msg: "Updated Successfully",
+    data: update,
+  })
 }
 
-export async function getPostWithCommentService(id: string) {
-  return await PrismaInstance().post.findUnique({
+export async function getPostService(id: string) {
+  const getPost = await PrismaInstance().post.findUnique({
     where: {
       id: id,
     },
+    include: {
+      author: true,
+      comment: true,
+    },
+  })
+
+  if (!getPost) {
+    return CommonResponse({
+      code: 401,
+      msg: "Failed",
+      data: null,
+    })
+  }
+
+  return CommonResponse({
+    code: 200,
+    msg: "Get Successfully",
+    data: getPost,
   })
 }

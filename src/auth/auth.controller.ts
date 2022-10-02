@@ -1,8 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import { ILoginUser } from "../user/user.type"
-import { CommonMessage } from "../utils/message"
 import { CommonResponse } from "../utils/repsonse"
-import { StatusCode } from "../utils/statusCode"
 import { loginService } from "./auth.service"
 
 export async function LoginUser(
@@ -13,9 +11,19 @@ export async function LoginUser(
 
   if (token !== "") {
     return reply.send(
-      CommonResponse(StatusCode.success, CommonMessage.login, token)
+      CommonResponse({
+        code: 401,
+        data: null,
+        msg: "Failed",
+      })
     )
   }
 
-  return reply.send(CommonResponse(StatusCode.failed, CommonMessage.failed, ""))
+  return reply.send(
+    CommonResponse({
+      code: 200,
+      msg: "Logined Successfully",
+      data: token,
+    })
+  )
 }

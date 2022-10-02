@@ -1,10 +1,9 @@
-export enum CommonMessage {
-  created = "Created Successfully",
-  updated = "Updated Successfully",
-  deleted = "Deleted Successfully",
-  get = "Get Successfully",
-  login = "Logined Successfully",
-  registered = "Registered Successfully",
-  posted = "Posted Successfully",
-  failed = "Failed",
-}
+export type CommonMessage =
+  | "Created Successfully"
+  | "Updated Successfully"
+  | "Deleted Successfully"
+  | "Get Successfully"
+  | "Logined Successfully"
+  | "Registered Successfully"
+  | "Posted Successfully"
+  | "Failed"

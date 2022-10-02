@@ -13,7 +13,6 @@ const S3 = new s3({
 })
 
 export async function UploadServiceToS3Storage(file: any) {
-  console.log(file.filename)
   const fileStream = fs.createReadStream(file.path)
   const uploadParams: any = {
     Bucket: bucket,
