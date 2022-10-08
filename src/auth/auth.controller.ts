@@ -8,8 +8,7 @@ export async function LoginUser(
   reply: FastifyReply
 ) {
   const token = await loginService(request.body)
-
-  if (token !== "") {
+  if (token === "") {
     return reply.send(
       CommonResponse({
         code: 401,
