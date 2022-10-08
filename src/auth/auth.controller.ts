@@ -9,7 +9,7 @@ export async function LoginUser(
 ) {
   const token = await loginService(request.body)
 
-  if (token !== "") {
+  if (token === "") {
     return reply.send(
       CommonResponse({
         code: 401,

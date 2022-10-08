@@ -16,7 +16,6 @@ const S3 = new s3_1.default({
     region,
 });
 async function UploadServiceToS3Storage(file) {
-    console.log(file.filename);
     const fileStream = fs_1.default.createReadStream(file.path);
     const uploadParams = {
         Bucket: bucket,

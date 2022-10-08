@@ -1,4 +1,1 @@
-export declare enum StatusCode {
-    success = 200,
-    failed = 401
-}
+export declare type StatusCode = 200 | 401;
