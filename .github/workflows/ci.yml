@@ -25,7 +25,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: Install Deps using yarn
     - run: yarn
-    - name: Build Project
     - run: yarn build --if-present
+    - run: pm2 start
