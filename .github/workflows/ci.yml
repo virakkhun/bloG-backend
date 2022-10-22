@@ -25,6 +25,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: yarn install
-    - run: yarn build --if-present
+    - run: npm i
+    - run: npm build --if-present
     - run: pm2 start
