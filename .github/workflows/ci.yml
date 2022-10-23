@@ -26,11 +26,11 @@ jobs:
           cache: "npm"
 
       - name: Install Deps
-      - run: npm i
-      - run: echo "Install Deps Successfully."
+        run: npm i
+        run: echo "Install Deps Successfully."
 
       - name: Setup .env
-      - run: |
+        run: |
           echo "PORT=${{ secret. }}" >> .env
           echo "AWS_SECRET_KEY=${{ secret.AWS_SECRET_KEY }}" >> .env
           echo "AWS_ACCESS_KEY=${{ secret.AWS_ACCESS_KEY }}" >> .env
@@ -39,6 +39,6 @@ jobs:
           echo "SECRET_KEY=${{ secret.SECRET_KEY }}" >> .env
 
       - name: Transpile Code
-      - run: npm run build --if-present
+        run: npm run build --if-present
       - name: Start the server
-      - run: pm2 restart Blog_Backend
+        run: pm2 restart Blog_Backend
