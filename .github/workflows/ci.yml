@@ -5,13 +5,12 @@ name: Blog Backend CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 jobs:
   build:
-
     runs-on: self-hosted
 
     strategy:
@@ -19,12 +18,27 @@ jobs:
         node-version: [16.x]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm i
-    - run: npm run build --if-present
-    - run: pm2 start
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Install Deps
+        run: npm i
+        run: echo "Install Deps Successfully."
+
+      - name: Setup .env
+        run: |
+          echo "PORT=${{ secret. }}" >> .env
+          echo "AWS_SECRET_KEY=${{ secret.AWS_SECRET_KEY }}" >> .env
+          echo "AWS_ACCESS_KEY=${{ secret.AWS_ACCESS_KEY }}" >> .env
+          echo "AWS_REGION=${{ secret.AWS_REGION }}" >> .env
+          echo "AWS_BUCKET_NAME=${{ secret.AWS_BUCKET_NAME }}" >> .env
+          echo "SECRET_KEY=${{ secret.SECRET_KEY }}" >> .env
+
+      - name: Transpile Code
+        run: npm run build --if-present
+      - name: Start the server
+        run: pm2 restart Blog_Backend
