@@ -6,14 +6,14 @@ var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.server = void 0;
 const fastify_1 = __importDefault(require("fastify"));
+const cors_1 = __importDefault(require("@fastify/cors"));
+const jwt_1 = __importDefault(require("@fastify/jwt"));
 const db_connect_1 = require("./db.connect");
+const auth_route_1 = require("./auth/auth.route");
 const comment_route_1 = __importDefault(require("./comment/comment.route"));
 const post_routes_1 = __importDefault(require("./post/post.routes"));
 const user_routes_1 = __importDefault(require("./user/user.routes"));
 require("dotenv/config");
-const cors_1 = __importDefault(require("@fastify/cors"));
-const jwt_1 = __importDefault(require("@fastify/jwt"));
-const auth_route_1 = require("./auth/auth.route");
 exports.server = (0, fastify_1.default)({
     logger: {
         level: "info",
@@ -55,7 +55,6 @@ exports.server.register(auth_route_1.authRoutes, {
 });
 exports.server.listen({
     port: parseInt(process.env.PORT) || 3001,
-    host: "0.0.0.0",
 }, (err, address) => {
     if (err) {
         console.log(err);

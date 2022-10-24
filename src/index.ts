@@ -1,13 +1,12 @@
 import fastify, { FastifyReply, FastifyRequest } from "fastify"
+import cors from "@fastify/cors"
+import fastifyJwt from "@fastify/jwt"
 import { DatabaseInitial } from "./db.connect"
+import { authRoutes } from "./auth/auth.route"
 import commentRoutes from "./comment/comment.route"
 import postRoutes from "./post/post.routes"
 import users from "./user/user.routes"
 import "dotenv/config"
-import cors from "@fastify/cors"
-import fastifyJwt from "@fastify/jwt"
-import { authRoutes } from "./auth/auth.route"
-import multer from "fastify-multer"
 
 export const server = fastify({
   logger: {
@@ -21,6 +20,7 @@ export const server = fastify({
 async function main() {
   await DatabaseInitial()
 }
+
 main()
 
 declare module "fastify" {
@@ -68,7 +68,6 @@ server.register(authRoutes, {
 server.listen(
   {
     port: parseInt(process.env.PORT!) || 3001,
-    host: "0.0.0.0",
   },
   (err, address) => {
     if (err) {

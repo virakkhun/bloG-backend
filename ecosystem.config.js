@@ -1,6 +1,8 @@
 module.exports = {
-  apps : [{
-    name   : "Blog_Backend",
-    script : "./dist/src/index.js"
-  }]
+  apps: [
+    {
+      name: "BlogBackApi",
+      script: "./dist/src/index.js",
+    },
+  ],
 }
