@@ -1,11 +1,12 @@
 import fastify, { FastifyReply, FastifyRequest } from "fastify"
-import cors from "@fastify/cors"
-import fastifyJwt from "@fastify/jwt"
 import { DatabaseInitial } from "./db.connect"
 import { authRoutes } from "./auth/auth.route"
+import cors from "@fastify/cors"
+import fastifyJwt from "@fastify/jwt"
 import commentRoutes from "./comment/comment.route"
 import postRoutes from "./post/post.routes"
 import users from "./user/user.routes"
+import apiVersion from "./version/api-version.route"
 import "dotenv/config"
 
 export const server = fastify({
@@ -63,6 +64,9 @@ server.register(commentRoutes, {
 })
 server.register(authRoutes, {
   prefix: "v1/auth",
+})
+server.register(apiVersion, {
+  prefix: "v1/version",
 })
 
 server.listen(
