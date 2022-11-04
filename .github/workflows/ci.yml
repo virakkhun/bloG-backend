@@ -35,6 +35,11 @@ jobs:
           echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .env
           echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          
+      - name: List Dir
+        run: |
+          echo "Successfully Setup Env"
+          ls -la
 
       - name: Generate Prisma Client
         run: npm run generate
