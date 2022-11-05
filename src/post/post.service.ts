@@ -144,6 +144,8 @@ export async function getPostService(id: string) {
   return CommonResponse({
     code: 200,
     msg: "Get Successfully",
-    data: getPost,
+    data: {
+      detail: getPost,
+    },
   })
 }
